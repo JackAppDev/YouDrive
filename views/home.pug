@@ -1,0 +1,104 @@
+html
+  head
+    title File Browser
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    link(rel="icon" href="file/icons/folder-icon-large.png") 
+    link(rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons")
+    link(rel="stylesheet" href="file/dialog-polyfill.css")
+    link(rel="stylesheet" href="file/material.css")
+    link(rel="stylesheet" href="file/styles.css")
+    link(rel="stylesheet" href="file/contextMenu.css")
+    script(src="file/jquery.js")
+    script(src="file/socket.io.js")
+    script(src="file/jquery.mobile-events.min.js")
+    script(src="file/download.js")
+    script(src="https://code.getmdl.io/1.3.0/material.min.js")
+    script(src="file/dialog-polyfill.js")
+    script(src="file/home.js")
+    script(type='text/javascript') rootPath = '#{path}';isMobile = #{isMobile};
+  body
+    input(type="file" name="file" id="file" style="display: none;")
+    div(class="mdl-layout mdl-js-layout mdl-layout--fixed-header")
+      header(class="mdl-layout__header mdl-layout__header--waterfall")
+        div(class="mdl-layout__header-row")
+          button(id="back" class="mdl-button mdl-js-button mdl-button--icon")
+            i(class="material-icons" style="color: white;") arrow_back
+          span(class="mdl-layout-spacer")
+          button(id="home" class="mdl-button mdl-js-button mdl-button--icon")
+            i(class="material-icons" style="color: white;") home
+          span(class="mdl-layout-spacer")
+          button(id="select" class="mdl-button mdl-js-button mdl-button--icon")
+            i(class="material-icons" style="color: white;") add_circle_outline
+          button(id="more" class="mdl-button mdl-js-button mdl-button--icon")
+            i(class="material-icons" style="color: white;") more_horiz
+        div(class="mdl-layout__tab-bar mdl-js-ripple-effect")
+      main(class="mdl-layout__content")
+        div(class="page-content")
+          ul(class="mdl-list" id="main")
+    div(class="contextMenu" id="selection-context-menu")
+      div(class="menu-item" id="downloadSelected")
+        i(class="material-icons") file_download
+        div(class="ripple") Download
+      div(class="menu-item" id="deleteSelected")
+        i(class="material-icons") delete
+        div(class="ripple") Delete
+    div(class="contextMenu" id="file-context-menu")
+      div(class="menu-item" id="edit")
+        i(class="material-icons") mode_edit
+        div(class="ripple") Edit
+      div(class="separator")
+      div(class="menu-item" id="download")
+        i(class="material-icons") file_download
+        div(class="ripple") Download
+      div(class="menu-item" id="rename")
+        i(class="material-icons") text_format
+        div(class="ripple") Rename
+      div(class="menu-item" id="delete")
+        i(class="material-icons") delete
+        div(class="ripple") Delete
+    div(class="contextMenu" id="folder-context-menu")
+      div(class="menu-item" id="open")
+        i(class="material-icons") folder_open
+        div(class="ripple") Open
+      div(class="separator")
+      div(class="menu-item" id="download")
+        i(class="material-icons") file_download
+        div(class="ripple") Download
+      div(class="menu-item" id="rename")
+        i(class="material-icons") text_format
+        div(class="ripple") Rename
+      div(class="menu-item" id="delete")
+        i(class="material-icons") delete
+        div(class="ripple") Delete
+    div(class="contextMenu" id="create-context-menu")
+      div(class="menu-item" id="newFolder")
+        i(class="material-icons") create_new_folder
+        div(class="ripple") New folder
+      div(class="menu-item" id="upload")
+        i(class="material-icons") file_upload
+        div(class="ripple") Upload
+    dialog(class="mdl-dialog" id="deleteDialog")
+      h3(class="mdl-dialog__title") Delete
+      div(class="mdl-dialog__content" id="deleteTitle")
+      div(class="mdl-dialog__actions")
+        button(type="button" class="mdl-button" id="deleteSubmit") Submit
+        button(type="button" class="mdl-button close" id="deleteCancel") Cancel
+    dialog(class="mdl-dialog" id="renameDialog")
+      h3(class="mdl-dialog__title") Rename
+      div(class="mdl-dialog__content")
+        div(class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label")
+          input(class="mdl-textfield__input" type="text" id="renameField")
+          label(class="mdl-textfield__label" for="renameField") Name
+      div(class="mdl-dialog__actions")
+        button(type="button" class="mdl-button" id="renameSubmit") Submit
+        button(type="button" class="mdl-button close" id="renameCancel") Cancel
+    dialog(class="mdl-dialog" id="newFolderDialog")
+      h3(class="mdl-dialog__title") New folder
+      div(class="mdl-dialog__content")
+        div(class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label")
+          input(class="mdl-textfield__input" type="text" id="newFolderField")
+          label(class="mdl-textfield__label" for="newFolderField") Name
+      div(class="mdl-dialog__actions")
+        button(type="button" class="mdl-button" id="newFolderSubmit") Submit
+        button(type="button" class="mdl-button close" id="newFolderCancel") Cancel
+        

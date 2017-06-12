@@ -1,0 +1,147 @@
+html
+  head
+    title Edit #{name}
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    link(rel="icon" href="file/icons/edit-icon-large.png")
+    script(src="codemirror/lib/codemirror.js")
+    link(rel="stylesheet" href="codemirror/lib/codemirror.css")
+    link(rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons")
+    link(rel="stylesheet" href="file/material.css")
+    link(rel="stylesheet" href="file/styles.css")
+    link(rel="stylesheet" href="codemirror/addon/hint/show-hint.css")
+    link(rel="stylesheet" href="codemirror/addon/dialog/dialog.css")
+    script(src="codemirror/mode/meta.js")
+    script(src="codemirror/addon/mode/loadmode.js")
+    script(src="https://code.getmdl.io/1.3.0/material.min.js")
+    script(src="file/jquery.js")
+    script(src="file/show-hint.js")
+    script(src="file/socket.io.js")
+    script(src="codemirror/addon/edit/closebrackets.js")
+    script(src="codemirror/addon/edit/matchbrackets.js")
+    script(src="codemirror/addon/fold/xml-fold.js")
+    script(src="codemirror/addon/edit/matchtags.js")
+    script(src="codemirror/addon/edit/closetag.js")
+    script(src="codemirror/addon/comment/comment.js")
+    script(src="codemirror/addon/fold/foldcode.js")
+    script(src="codemirror/addon/hint/javascript-hint.js")
+    script(src="codemirror/addon/selection/active-line.js")
+    script(src="codemirror/addon/dialog/dialog.js")
+    script(src="codemirror/addon/search/searchcursor.js")
+    script(src="codemirror/addon/search/search.js")
+  body
+    div(class="mdl-layout mdl-js-layout mdl-layout--fixed-header")
+      header(class="mdl-layout__header")
+        div(class="mdl-layout__header-row")
+          button(id="back" class="mdl-button mdl-js-button mdl-button--icon")
+            i(class="material-icons" style="color: white;") arrow_back
+          span(class="mdl-layout-spacer")
+          span(class="mdl-layout-title")= name
+          div(class="mdl-layout-spacer")
+          button(id="search" class="mdl-button mdl-js-button mdl-button--icon")
+            i(class="material-icons" style="color: white;") search
+      main(class="mdl-layout__content")
+        div(class="page-content")
+          textarea= code
+    script(type='text/javascript').
+      print = console.log
+      var path = '!{path}'
+      const isMobile = '!{isMobile}'
+      const username = '!{username}'
+    script(type='text/javascript').
+      window.onkeydown = function(e) {
+        return !(e.keyCode == 32 && (e.target.type != 'text' && e.target.type != 'textarea'))
+      }
+      CodeMirror.modeURL = 'codemirror/mode/%N/%N.js'
+      
+      var cm = CodeMirror.fromTextArea($('textarea')[0], {
+        tabSize: 2, 
+        lineNumbers: true,
+        matchBrackets: true,
+        autoCloseBrackets: true,
+        matchTags: true,
+        autoCloseTags: true,
+        styleActiveLine: true,
+        extraKeys: {
+          "Cmd-/": "toggleComment",
+          "Ctrl-/": "toggleComment",
+          "Cmd-Enter": "execute",
+          "Ctrl-Enter": "execute"
+        },
+      })
+
+      var socket = io.connect();
+
+      socket.on('refresh', function (data) {
+        cm.setValue(data.body);
+      })
+      socket.on('change', function (data) {
+        print(data);
+        cm.replaceRange(data.text, data.from, data.to);
+      })
+      
+      var name = '#{name}'
+      socket.emit('init', {
+        path: `${path}|${name}`,
+        username: username
+      })
+      
+      cm.on('change', function (i, op) {
+        op.path = `${path}|${name}`
+        op.username = username
+        socket.emit('change', op);
+        socket.emit('refresh', {
+          body: cm.getValue(),
+          path: op.path,
+          username: op.username
+        });
+      })
+
+      window.onbeforeunload = function() {
+        socket.emit('deinit', {
+          path: `${path}|${name}`,
+          username: username
+        })
+        return null
+      }
+      
+      var array = name.split('.')
+      var mode = CodeMirror.findModeByExtension(array[array.length - 1])
+      cm.setOption("mode", mode.mime)
+      CodeMirror.autoLoadMode(
+        cm,
+        mode.mode
+      )
+      
+      CodeMirror.commands.execute = function() {
+        var f = new Function (cm.getDoc().getValue())
+        return f()
+      }
+      
+      CodeMirror.commands.save = function() {
+        $('#save').click()
+      }
+    script(type='text/javascript').
+      cm.on("keydown", function(_, keyData) {
+        var restrictedKeys = [
+        	"ArrowUp", "ArrowDown",
+          "Enter",
+          "Control", "Command",
+          "Tab"
+        ]
+        if (!restrictedKeys.includes(keyData.key)) {
+        	cm.showHint()
+        }
+      })
+    script(type='text/javascript').
+      $('#back').click(function() {
+      	print(path)
+        path = path.split(",").join('|')
+        print(path)
+      	$.get('/', {
+        	path: path
+        })
+        window.location.href = '/'
+      })
+      $('#search').click(function() {
+        cm.execCommand('find')
+      })

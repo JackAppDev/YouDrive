@@ -1,0 +1,31 @@
+html
+  head
+    title File Browser
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    link(rel="stylesheet" href="file/dialog-polyfill.css")
+    link(rel="stylesheet" href="file/material.css")
+    link(rel="stylesheet" href="file/styles.css")
+    script(src="file/jquery.js")
+    script(src="https://code.getmdl.io/1.3.0/material.min.js")
+    script(src="file/dialog-polyfill.js")
+  body
+    dialog(class="mdl-dialog")
+      h3(class="mdl-dialog__title") Login
+      form(action="/login" method="post")
+        div(class="mdl-dialog__content")
+          div(class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label")
+            input(class="mdl-textfield__input" type="text" id="username" name="username")
+            label(class="mdl-textfield__label" for="username") Username
+          div(class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label")
+            input(class="mdl-textfield__input" type="password" id="password" name="password")
+            label(class="mdl-textfield__label" for="password") Password
+        div(class="mdl-dialog__actions")
+          button(type="submit" class="mdl-button" id="submit") Submit
+  script(type='text/javascript').
+    $('dialog').each(function(_, dialog) {
+      dialogPolyfill.registerDialog(dialog) //- allow use of <dialog> on all browsers
+      dialog.showModal()
+    })
+    componentHandler.upgradeDom() //- Materialize components
+
+    

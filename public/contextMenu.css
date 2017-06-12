@@ -1,0 +1,238 @@
+body {
+  font-family: 'Roboto', sans-serif;
+}
+body .title {
+  font-size: 5vw;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+body .legitRipple-ripple {
+  background: rgba(0,0,0,0.17);
+}
+.contextMenu {
+  border-radius: 7.5px;
+  padding: 6px 0;
+  max-width: 160px;
+  max-height: 320px;
+  opacity: 1;
+  z-index: 100000;
+  position: absolute;
+  left: -1000%;
+  overflow-X: hidden;
+  overflow-Y: auto;
+  white-space: nowrap;
+  background: #fff;
+  box-shadow: 0 2px 4px 1px rgba(0,0,0,0.1), 0 0 20px rgba(0,0,0,0.1);
+  margin: 1px;
+  transition: max-width 0.5s -0.1s, max-height 0.5s -0.1s, opacity 0.5s;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.contextMenu.hidden {
+  max-width: 0;
+  max-height: 0;
+  opacity: 0.3;
+  overflow: hidden;
+  transition: max-width 0.2s 0.2s, max-height 0.2s 0.2s, opacity 0.5s 0.2s;
+}
+.contextMenu i {
+  color: #333;
+}
+.contextMenu .menu-item {
+  padding: 12px 24px 12px 30px;
+  min-width: 198px;
+  width: 100%;
+  font-size: 15px;
+  height: 16px;
+  position: relative;
+  overflow: hidden;
+  color: #333;
+  box-shadow: 4px 0 rgba(0,0,0,0) inset;
+  cursor: pointer;
+  transition: all 0.2s, background 0.5s, box-shadow 0.5s;
+}
+.contextMenu .menu-item div {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 12px 24px 12px 48px;
+}
+.contextMenu .menu-item i {
+  display: inline-block;
+  position: absolute;
+  top: 8px;
+  left: 16px;
+}
+.contextMenu .menu-item:hover {
+  background-color: rgba(0,0,0,0.2);
+  box-shadow: 4px 0 rgba(0,0,0,0.25) inset;
+}
+.contextMenu .menu-item:active {
+  background-color: rgba(0,0,0,0.25);
+  box-shadow: 4px 0 rgba(0,0,0,0.4) inset;
+}
+.contextMenu:not(.hidden) .icon-group {
+  flex-wrap: wrap;
+}
+.contextMenu .icon-group {
+  width: 100%;
+  display: flex;
+}
+.contextMenu .icon-group .menu-icon {
+  display: inline-flex;
+  flex-grow: 1;
+  padding: 12px;
+  min-width: 16px;
+  height: 16px;
+  font-size: 15px;
+  position: relative;
+  overflow: hidden;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.contextMenu .icon-group .menu-icon:hover {
+  background: rgba(0,0,0,0.17);
+}
+.contextMenu .icon-group .menu-icon:active {
+  background: rgba(0,0,0,0.25);
+}
+.contextMenu .icon-group .menu-icon i {
+  position: absolute;
+  top: 8px;
+  left: -1px;
+  width: 100%;
+  text-align: center;
+}
+.contextMenu .icon-group .menu-icon.flex-only {
+  display: none;
+}
+#flex-example:checked ~ .contextMenu .flex-only {
+  display: inline-block;
+}
+.contextMenu .separator {
+  width: 100%;
+  height: 1px;
+  background: rgba(0,0,0,0.17);
+  padding: 0;
+  margin: 8px 0;
+}
+.contextMenu .label {
+  padding: 2px 16px;
+  display: block;
+  font-size: 15px;
+  color: #424242;
+  cursor: default;
+}
+@media (pointer: fine) {
+  .contextMenu::-webkit-scrollbar {
+    width: 12px;
+    background: #fff;
+    box-shadow: -1px 0 rgba(0,0,0,0.1);
+  }
+  .contextMenu::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+  .contextMenu::-webkit-scrollbar-track {
+    background-clip: padding-box;
+    border: solid transparent;
+    border-width: 0 0 0 4px;
+  }
+  .contextMenu::-webkit-scrollbar-button {
+    height: 0;
+    width: 0;
+  }
+  .contextMenu::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.2);
+    background-clip: padding-box;
+    border: solid transparent;
+    border-width: 1px 1px 1px 1px;
+    min-height: 28px;
+    padding: 100px 0 0;
+    box-shadow: 1px 1px 0 rgba(0,0,0,0.1) inset, 0 -1px 0 rgba(0,0,0,0.07) inset;
+  }
+  .contextMenu::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0,0,0,0.37);
+    box-shadow: 1px 1px 0 rgba(0,0,0,0.21) inset, 0 -1px 0 rgba(0,0,0,0.17) inset;
+  }
+  .contextMenu::-webkit-scrollbar-thumb:active {
+    background-color: rgba(0,0,0,0.5);
+    box-shadow: 1px 1px 0 rgba(0,0,0,0.41) inset, 0 -1px 0 rgba(0,0,0,0.37) inset;
+  }
+}
+/*
+legitRipple.js v1.0.0, Copyright by Matthias Vogt (ISC license)
+ripple.min.css, compiled: 12/10/2015 @ 0:29:21
+*/
+.legitRipple {
+  position: relative;
+  overflow: hidden;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  z-index: 0;
+}
+.legitRipple.longOpacity .legitRipple-ripple {
+  -webkit-transition-duration: 0.15s, 3.6s;
+  transition-duration: 0.15s, 3.6s;
+}
+.legitRipple.longDrop .legitRipple-ripple {
+  -webkit-transition-duration: 0.75s, 0.9s;
+  transition-duration: 0.75s, 0.9s;
+  -webkit-transition-timing-function: linear, cubic-bezier(1, 0, 0.8, 0);
+  transition-timing-function: linear, cubic-bezier(1, 0, 0.8, 0);
+}
+.legitRipple.longOpacity.longDrop .legitRipple-ripple {
+  -webkit-transition-duration: 0.75s, 3.6s;
+  transition-duration: 0.75s, 3.6s;
+  -webkit-transition-timing-function: linear, cubic-bezier(1, 0, 0.8, 0);
+  transition-timing-function: linear, cubic-bezier(1, 0, 0.8, 0);
+}
+.legitRipple-ripple {
+  position: absolute;
+  z-index: -1;
+  -webkit-transform: translate(-50%, -50%) scale(1);
+  transform: translate(-50%, -50%) scale(1);
+  -webkit-transition: width 0.15s linear, opacity 0.9s ease-out;
+  transition: width 0.15s linear, opacity 0.9s ease-out;
+  width: 0;
+  opacity: 1;
+  pointer-events: none;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.4);
+}
+.legitRipple-ripple:before {
+  content: "";
+  padding-top: 100%;
+  display: block;
+}
+img~.legitRipple-ripple {
+  z-index: 0;
+}
+.legitRipple-custom {
+  display: none;
+}
+.legitRipple-custom~.legitRipple-ripple {
+  display: inline-block;
+  overflow: hidden;
+}
+.legitRipple-custom~.legitRipple-ripple>* {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}

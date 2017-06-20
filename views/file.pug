@@ -54,7 +54,8 @@ html
       CodeMirror.modeURL = 'codemirror/mode/%N/%N.js'
       
       var cm = CodeMirror.fromTextArea($('textarea')[0], {
-        tabSize: 2, 
+        tabSize: 2,
+        indentWithTabs: false, 
         lineNumbers: true,
         matchBrackets: true,
         autoCloseBrackets: true,
@@ -70,7 +71,14 @@ html
       })
 
       var socket = io.connect();
-
+      socket.on('cursorActivity', function(data){
+        print(data)
+        // create a node
+        $('.cursor').remove()
+        var htmlNode = $('<div class="cursor" style="width:5px;height:10px;background-color: red;"></div>')[0]
+        cm.addWidget(data, htmlNode, true)
+        cm.scrollIntoView(cm.getCursor())
+      })
       socket.on('refresh', function (data) {
         cm.setValue(data.body);
       })
@@ -95,7 +103,20 @@ html
           username: op.username
         });
       })
-
+     
+      cm.on('cursorActivity', function(data) {
+        var selection = data.doc.sel.ranges[0]
+        print(selection)
+        if (selection.anchor == selection.head) {
+          socket.emit('cursorActivity', {
+            path: `${path}|${name}`,
+            pos: {
+              line: selection.head.line,
+              ch: selection.head.ch
+            }
+          })
+        }
+      })
       window.onbeforeunload = function() {
         socket.emit('deinit', {
           path: `${path}|${name}`,

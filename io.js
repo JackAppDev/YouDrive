@@ -2,7 +2,7 @@ print = console.log
 
 const fs = require('fs-extra')
 const path = require('path')
-const saveDelay = 4000
+const saveDelay = 2000
 
 const init = function(server) {
   const io = require('socket.io')(server)
@@ -42,6 +42,13 @@ const init = function(server) {
       if (!files[op.path].sockets.includes(socket))
         files[op.path].sockets.push(socket)
     })
+    
+    socket.on('cursorActivity', function(op) {
+      files[op.path].sockets.forEach(function(sock) {
+        if (sock != socket)
+          sock.emit('cursorActivity', op.pos)
+      })
+    })
 
     socket.on('change', function (op) {
       if (op.origin == '+input' || op.origin == 'paste' || op.origin == '+delete') {
@@ -73,6 +80,4 @@ const init = function(server) {
   })
 }
 
-module.exports = {
-  init: init
-}
+module.exports = init
